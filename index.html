@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>petproject024</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        :root {
+            --primary: #6200ee;
+            --secondary: #03dac6;
+            --background: #121212;
+            --surface: #1e1e1e;
+            --on-background: #e1e1e1;
+            --on-surface: #a7a7a7;
+            --error: #cf6679;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--on-background);
+            background-color: var(--background);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #9d4edd);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(98, 0, 238, 0.5) 0%, rgba(98, 0, 238, 0) 70%),
+                        radial-gradient(circle at 70% 70%, rgba(3, 218, 198, 0.5) 0%, rgba(3, 218, 198, 0) 70%);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--secondary);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 0.8rem;
+            color: #bb86fc;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .navbar {
+            background-color: var(--surface);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+        }
+
+        .navbar-logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 100%;
+            background-color: var(--secondary);
+            border-radius: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--on-surface);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .card {
+            background-color: var(--surface);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgba(98, 0, 238, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            color: #bb86fc;
+        }
+
+        .section {
+            margin: 4rem 0;
+        }
+
+        .example-toggle {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: background-color 0.3s;
+        }
+
+        .example-toggle:hover {
+            background-color: #7c43e1;
+        }
+
+        .example-content {
+            display: none;
+            background-color: #2d2d2d;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .footer {
+            background-color: var(--surface);
+            color: var(--on-surface);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .topic-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--surface);
+            color: var(--secondary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+                margin-left: 0;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-bg"></div>
+        <div class="header-content">
+            <h1>Simple Ontologies in RDF & RDF Schema</h1>
+            <p>Understanding and building knowledge representations for the Semantic Web</p>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="navbar-logo">RDF Ontologies</a>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#rdf-basics">RDF Basics</a></li>
+                <li><a href="#rdfs">RDFS</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#tools">Tools</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="introduction" class="section">
+            <h2>Introduction to Ontologies</h2>
+            <div class="card">
+                <p>An <strong>ontology</strong> is a formal representation of knowledge as a set of concepts within a domain, and the relationships between those concepts. In the context of the Semantic Web, ontologies provide a way to describe resources and their relationships in a machine-readable format.</p>
+                <p>RDF (Resource Description Framework) and RDFS (RDF Schema) are fundamental technologies for building ontologies and representing knowledge on the Semantic Web.</p>
+            </div>
+
+            <h3>Why Ontologies Matter</h3>
+            <div class="card">
+                <p>Ontologies enable:</p>
+                <ul class="topic-list">
+                    <li><strong>Knowledge sharing</strong> across applications, enterprises, and community boundaries</li>
+                    <li><strong>Automated reasoning</strong> and inference over data</li>
+                    <li><strong>Semantic interoperability</strong> between different systems</li>
+                    <li><strong>Rich knowledge representation</strong> beyond basic database models</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="rdf-basics" class="section">
+            <h2>RDF Basics</h2>
+            <div class="card">
+                <p>The Resource Description Framework (RDF) is a standard model for data interchange on the Web. RDF has features that facilitate data merging even if the underlying schemas differ.</p>
+                
+                <h3>RDF Triple Structure</h3>
+                <p>RDF represents information as <strong>triples</strong>:</p>
+                <ul>
+                    <li><strong>Subject</strong>: The resource being described</li>
+                    <li><strong>Predicate</strong>: The property or relationship</li>
+                    <li><strong>Object</strong>: The value or related resource</li>
+                </ul>
+
+                <button class="example-toggle" id="toggle-rdf-example">View RDF Example</button>
+                <div class="example-content" id="rdf-example">
+<pre>
+# Example of RDF triples in Turtle syntax
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+ex:Person1 foaf:name "John Doe" .
+ex:Person1 foaf:knows ex:Person2 .
+ex:Person2 foaf:name "Jane Smith" .
+</pre>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="card">
+                    <h3>URI Identifiers</h3>
+                    <p>RDF uses URIs (Uniform Resource Identifiers) to name the subjects, predicates, and sometimes objects in statements. This ensures global uniqueness and allows for distributed knowledge representation.</p>
+                </div>
+                <div class="card">
+                    <h3>RDF Serialization Formats</h3>
+                    <p>RDF can be expressed in multiple formats:</p>
+                    <ul>
+                        <li>RDF/XML</li>
+                        <li>Turtle</li>
+                        <li>N-Triples</li>
+                        <li>JSON-LD</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="rdfs" class="section">
+            <h2>RDF Schema (RDFS)</h2>
+            <div class="card">
+                <p>RDF Schema extends RDF with a vocabulary for describing properties and classes of RDF resources. It provides mechanisms for describing groups of related resources and the relationships between these resources.</p>
+                
+                <h3>Key RDFS Constructs</h3>
+                <ul class="topic-list">
+                    <li><code>rdfs:Class</code> - Defines a resource as a class for other resources</li>
+                    <li><code>rdfs:subClassOf</code> - Indicates that one class is a subclass of another</li>
+                    <li><code>rdfs:Property</code> - The class of RDF properties</li>
+                    <li><code>rdfs:subPropertyOf</code> - Indicates that one property is a specialization of another</li>
+                    <li><code>rdfs:domain</code> - Specifies the class of the subject in a triple using this property</li>
+                    <li><code>rdfs:range</code> - Specifies the class or datatype of the object in a triple using this property</li>
+                </ul>
+
+                <button class="example-toggle" id="toggle-rdfs-example">View RDFS Example</button>
+                <div class="example-content" id="rdfs-example">
+<pre>
+# Example of RDFS in Turtle syntax
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex: <http://example.org/> .
+
+# Class definitions
+ex:Person rdf:type rdfs:Class .
+ex:Student rdf:type rdfs:Class .
+ex:Student rdfs:subClassOf ex:Person .
+
+# Property definitions
+ex:name rdf:type rdf:Property .
+ex:name rdfs:domain ex:Person .
+ex:name rdfs:range xsd:string .
+
+ex:enrolledIn rdf:type rdf:Property .
+ex:enrolledIn rdfs:domain ex:Student .
+ex:enrolledIn rdfs:range ex:Course .
+</pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="examples" class="section">
+            <h2>Building a Simple Ontology</h2>
+            <p>Let's walk through the process of building a simple ontology for a university domain:</p>
+            
+            <div class="card">
+                <h3>Step 1: Identify Key Concepts</h3>
+                <p>First, identify the main classes in your domain:</p>
+                <ul>
+                    <li>Person</li>
+                    <li>Student (subclass of Person)</li>
+                    <li>Professor (subclass of Person)</li>
+                    <li>Course</li>
+                    <li>Department</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>Step 2: Define Properties</h3>
+                <p>Identify relationships between classes:</p>
+                <ul>
+                    <li><code>teaches</code> (domain: Professor, range: Course)</li>
+                    <li><code>enrolledIn</code> (domain: Student, range: Course)</li>
+                    <li><code>belongsTo</code> (domain: Professor, range: Department)</li>
+                    <li><code>offers</code> (domain: Department, range: Course)</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>Step 3: Create the RDFS Representation</h3>
+                <button class="example-toggle" id="toggle-university-example">View University Ontology Example</button>
+                <div class="example-content" id="university-example">
+<pre>
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix univ: <http://example.org/university#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Class definitions
+univ:Person rdf:type rdfs:Class .
+univ:Student rdf:type rdfs:Class ;
+             rdfs:subClassOf univ:Person .
+univ:Professor rdf:type rdfs:Class ;
+               rdfs:subClassOf univ:Person .
+univ:Course rdf:type rdfs:Class .
+univ:Department rdf:type rdfs:Class .
+
+# Property definitions
+univ:name rdf:type rdf:Property ;
+          rdfs:domain univ:Person ;
+          rdfs:range xsd:string .
+
+univ:studentID rdf:type rdf:Property ;
+               rdfs:domain univ:Student ;
+               rdfs:range xsd:string .
+
+univ:teaches rdf:type rdf:Property ;
+             rdfs:domain univ:Professor ;
+             rdfs:range univ:Course .
+
+univ:enrolledIn rdf:type rdf:Property ;
+                rdfs:domain univ:Student ;
+                rdfs:range univ:Course .
+
+univ:belongsTo rdf:type rdf:Property ;
+               rdfs:domain univ:Professor ;
+               rdfs:range univ:Department .
+
+univ:offers rdf:type rdf:Property ;
+            rdfs:domain univ:Department ;
+            rdfs:range univ:Course .
+
+# Some instance data
+univ:CS101 rdf:type univ:Course ;
+           univ:title "Introduction to Computer Science" .
+
+univ:ComputerScience rdf:type univ:Department ;
+                      univ:offers univ:CS101 .
+
+univ:ProfessorSmith rdf:type univ:Professor ;
+                     univ:name "Jane Smith" ;
+                     univ:teaches univ:CS101 ;
+                     univ:belongsTo univ:ComputerScience .
+
+univ:StudentDoe rdf:type univ:Student ;
+                 univ:name "John Doe" ;
+                 univ:studentID "S12345" ;
+                 univ:enrolledIn univ:CS101 .
+</pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="section">
+            <h2>Tools and Resources</h2>
+            <div class="info-grid">
+                <div class="card">
+                    <h3>Protégé</h3>
+                    <p>An open-source ontology editor and framework for building intelligent systems.</p>
+                    <p>Features include:</p>
+                    <ul>
+                        <li>Visual ontology editor</li>
+                        <li>Support for RDF, RDFS, and OWL</li>
+                        <li>Reasoning capabilities</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Apache Jena</h3>
+                    <p>A free and open source Java framework for building Semantic Web and Linked Data applications.</p>
+                    <ul>
+                        <li>RDF API</li>
+                        <li>SPARQL query engine</li>
+                        <li>Ontology API for OWL and RDFS</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>RDF Validators</h3>
+                    <p>Tools to validate your RDF and RDFS documents:</p>
+                    <ul>
+                        <li>W3C RDF Validation Service</li>
+                        <li>RDF Playground</li>
+                        <li>EasyRDF Converter</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Visualization Tools</h3>
+                    <p>Tools for visualizing RDF graphs:</p>
+                    <ul>
+                        <li>WebVOWL</li>
+                        <li>RDF Gravity</li>
+                        <li>Gruff</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Simple Ontologies in RDF and RDF Schema | A Comprehensive Guide</p>
+            <p>Created for educational purposes | Last updated: March 2025</p>
+        </div>
+    </footer>
+
+    <button class="dark-mode-toggle" id="theme-toggle">☀️</button>
+
+    <script>
+        $(document).ready(function() {
+            // Mobile menu toggle
+            $('#mobile-menu').click(function() {
+                $('.nav-links').toggleClass('active');
+            });
+
+            // Smooth scrolling for navigation
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
+                
+                const target = this.hash;
+                const $target = $(target);
+                
+                $('html, body').animate({
+                    'scrollTop': $target.offset().top - 70
+                }, 800, 'swing');
+                
+                // Close mobile menu after clicking
+                $('.nav-links').removeClass('active');
+            });
+
+            // Example toggle functionality
+            $('.example-toggle').click(function() {
+                const targetId = $(this).attr('id').replace('toggle-', '');
+                $('#' + targetId).slideToggle(300);
+                
+                const buttonText = $(this).text();
+                $(this).text(
+                    buttonText === 'View RDF Example' ? 'Hide RDF Example' : 
+                    buttonText === 'View RDFS Example' ? 'Hide RDFS Example' : 
+                    buttonText === 'View University Ontology Example' ? 'Hide University Ontology Example' :
+                    'View Example'
+                );
+            });
+
+            // Theme toggle (light/dark mode)
+            let isDarkMode = true;
+            $('#theme-toggle').click(function() {
+                if (isDarkMode) {
+                    document.documentElement.style.setProperty('--background', '#f5f5f5');
+                    document.documentElement.style.setProperty('--surface', '#ffffff');
+                    document.documentElement.style.setProperty('--on-background', '#212121');
+                    document.documentElement.style.setProperty('--on-surface', '#616161');
+                    $(this).text('🌙');
+                } else {
+                    document.documentElement.style.setProperty('--background', '#121212');
+                    document.documentElement.style.setProperty('--surface', '#1e1e1e');
+                    document.documentElement.style.setProperty('--on-background', '#e1e1e1');
+                    document.documentElement.style.setProperty('--on-surface', '#a7a7a7');
+                    $(this).text('☀️');
+                }
+                isDarkMode = !isDarkMode;
+            });
+
+            // Animate cards on scroll
+            $(window).scroll(function() {
+                $('.card').each(function() {
+                    const cardPos = $(this).offset().top;
+                    const topOfWindow = $(window).scrollTop();
+                    const windowHeight = $(window).height();
+                    
+                    if (cardPos < topOfWindow + windowHeight - 100) {
+                        $(this).addClass('animated');
+                    }
+                });
+            });
+
+            // Add class to nav links when section is in viewport
+            $(window).scroll(function() {
+                let currentPosition = $(this).scrollTop();
+                
+                $('section').each(function() {
+                    let sectionTop = $(this).offset().top - 100;
+                    let sectionId = $(this).attr('id');
+                    
+                    if (currentPosition >= sectionTop) {
+                        $('.nav-links a').removeClass('active');
+                        $('.nav-links a[href="#'+sectionId+'"]').addClass('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
